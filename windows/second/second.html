@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/general.css" />
+    <link rel="stylesheet" href="../../css/header.css" />
+    <link rel="stylesheet" href="../../css/ingame.css" />
+    <link rel="stylesheet" href="../../css/modal.css" />
+    <link rel="stylesheet" href="../../css/note.css" />
+    <title>Overwolf Sample App - Second Screen window</title>
+  </head>
+  <body class="second">
+    <!-- -------------------------------- Header ------------------------------- -->
+
+    <header class="app-header">
+      <img src="../../icons/IconMouseOver.png" />
+      <div class="hotkey-text">
+        <span data-i18n="show_hide_hotkey">Show/Hide Hotkey:</span>
+        <kbd id="hotkey-toggle"></kbd>
+      </div>
+      <div class="hotkey-text">
+        <span data-i18n="toggle_second_screen">Toggle Second Screen Hotkey:</span>
+        <kbd id="hotkey-second-screen"></kbd>
+      </div>
+      <div class="window-controls-group">
+        <button id="minimizeButton" class="window-control window-control-minimize" />
+        <!-- <button id="maximizeButton" class="window-control window-control-maximize" /> -->
+        <button id="closeButton" class="window-control window-control-close" />
+      </div>
+    </header>
+
+    <!-- --------------------------------- Main -------------------------------- -->
+    <main>
+      <div id="logs">
+        <div id="events" class="logColumn">
+          <div id="teamList" class="dataText">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="hero">영웅</th>
+                  <th data-i18n="battletag">배틀태그</th>
+                  <th data-i18n="memo">메모</th>
+                </tr>
+              </thead>
+              <tbody id="teamTable" class="roster-table">
+                <tr class="roster-0"></tr>
+                <tr class="roster-1"></tr>
+                <tr class="roster-2"></tr>
+                <tr class="roster-3"></tr>
+                <tr class="roster-4"></tr>
+                <tr class="roster-5"></tr>
+                <tr class="roster-6"></tr>
+                <tr class="roster-7"></tr>
+                <tr class="roster-8"></tr>
+                <tr class="roster-9"></tr>
+                <tr class="roster-10"></tr>
+                <tr class="roster-11"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id="infoUpdates" class="logColumn">
+          <div id="enemyList" class="dataText">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="hero">영웅</th>
+                  <th data-i18n="battletag">배틀태그</th>
+                  <th data-i18n="memo">메모</th>
+                </tr>
+              </thead>
+              <tbody id="enemyTable" class="roster-table">
+                <tr class="roster-0"></tr>
+                <tr class="roster-1"></tr>
+                <tr class="roster-2"></tr>
+                <tr class="roster-3"></tr>
+                <tr class="roster-4"></tr>
+                <tr class="roster-5"></tr>
+                <tr class="roster-6"></tr>
+                <tr class="roster-7"></tr>
+                <tr class="roster-8"></tr>
+                <tr class="roster-9"></tr>
+                <tr class="roster-10"></tr>
+                <tr class="roster-11"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="./second.js"></script>
+  </body>
+</html>
