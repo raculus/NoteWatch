@@ -8,13 +8,17 @@
     <link rel="stylesheet" href="../../css/ingame.css" />
     <link rel="stylesheet" href="../../css/modal.css" />
     <link rel="stylesheet" href="../../css/note.css" />
-    <title>Overwolf Sample App - Second Screen window</title>
+    <title>NoteWatch</title>
   </head>
   <body class="second">
     <!-- -------------------------------- Header ------------------------------- -->
 
     <header class="app-header">
       <img src="../../icons/IconMouseOver.png" />
+      <div class="hotkey-text">
+        <span data-i18n="status">Status:</span>
+        <kbd id="ow-state"></kbd>
+      </div>
       <div class="hotkey-text">
         <span data-i18n="show_hide_hotkey">Show/Hide Hotkey:</span>
         <kbd id="hotkey-toggle"></kbd>
@@ -31,10 +35,10 @@
     </header>
 
     <!-- --------------------------------- Main -------------------------------- -->
-    <main>
+    <main>      
       <div id="logs">
         <div id="events" class="logColumn">
-          <div id="teamList" class="dataText">
+          <div id="teamList" class="dataText table-container">
             <table>
               <thead>
                 <tr>
@@ -61,7 +65,7 @@
           </div>
         </div>
         <div id="infoUpdates" class="logColumn">
-          <div id="enemyList" class="dataText">
+          <div id="enemyList" class="dataText table-container">
             <table>
               <thead>
                 <tr>
@@ -88,6 +92,10 @@
           </div>
         </div>
       </div>
+      <!-- <div id="owad" style="width: 400px; height: 600px; background: teal;">
+        <span style="display: flex; justify-content: center; align-items: center; height: 100%;">Ad</span>
+        <owadview />
+      </div> -->
     </main>
 
     <script type="module" src="./second.js"></script>

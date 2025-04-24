@@ -7,23 +7,6 @@ import { EventBus } from '../../scripts/services/event-bus.js';
 import { GoogleAnalytics } from '../../scripts/services/google-analytics.js';
 import { kGameClassIds, kGamesFeatures } from '../../scripts/constants/games-features.js';
 import { kHotkeySecondScreen, kHotkeyToggle } from '../../scripts/constants/hotkeys-ids.js';
-import { writeFile } from '../../scripts/utils/file-writer.js';
-
-function extractedPlayers(infoUpdate) {
-  console.log('infoUpdate:', infoUpdate);
-  const roster = infoUpdate.info.roster;
-
-  const extractedPlayers = Object.keys(roster).map(key => {
-      const parsed = JSON.parse(roster[key]);
-      return {
-          battlenet_tag: parsed.battlenet_tag,
-          hero_name: parsed.hero_name,
-          is_local: parsed.is_local,
-          is_teammate: parsed.is_teammate
-      };
-  });
-  console.log(extractedPlayers);
-}
 
 export class BackgroundController {
   constructor() {
@@ -309,11 +292,11 @@ export class BackgroundController {
       this.owEventsStore.push(event);
 
       this.owEventBus.trigger('event', event);
+      console.log('event:', event);
 
       switch (event.name) {
         case 'game_start':
         case 'game_end':
-          writeFile('default');
           break;
         }
     });
@@ -324,18 +307,8 @@ export class BackgroundController {
    * @private
    */
   _onInfoUpdate(infoUpdate) {
-    extractedPlayers(infoUpdate);
-
     this.owInfoUpdatesStore.push(infoUpdate);
 
     this.owEventBus.trigger('info', infoUpdate);
-
-    const localPlayerHero = Object.keys(roster)
-    .map(key => JSON.parse(roster[key]))
-    .find(player => player.is_local === true)?.hero_name;
-    if (!localPlayerHero) {
-      return;
-    }
-    writeFile(localPlayerHero);
   }
 }

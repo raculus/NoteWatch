@@ -1,22 +1,5 @@
 const PATH = overwolf.io.paths.localAppData + "\\ow2_players_memo.json";
 
-function writeFile(content) {
-const filePath = overwolf.io.paths.localAppData + "\\temp\\current_hero.txt";
-  overwolf.io.writeFileContents(
-      filePath,
-      content,
-      overwolf.io.enums.eEncoding.UTF8,  // UTF8 인코딩 :contentReference[oaicite:1]{index=1}
-      true,                              // 필요 시 UAC 대화상자 트리거
-      (result) => {
-        if (result.success) {
-          console.log("파일 생성/덮어쓰기 성공:", filePath);
-        } else {
-          console.error("파일 쓰기 실패:", result.error);
-        }
-      }
-    );
-}
-
 function writeJSON(content) {
   return new Promise((resolve, reject) => {
       overwolf.io.writeFileContents(
@@ -87,4 +70,4 @@ function jsonExists(filePath) {
     });
 }
 
-export { PATH, writeJSON, readJSON, jsonExists, initializeFileIfNeeded, writeFile};
+export { PATH, writeJSON, readJSON, jsonExists, initializeFileIfNeeded};

@@ -2,6 +2,7 @@ import { SampleAppView } from '../sample-app-view.js'
 import { writeJSON, readJSON } from '../../scripts/utils/file-writer.js';
 import i18n from '../../locale/index.js';
 import { sortTable } from '../../scripts/utils/table-sort.js';
+import { getGameState } from '../../scripts/utils/ow-state.js';
 
 export class SecondView extends SampleAppView {
   constructor() {
@@ -13,6 +14,8 @@ export class SecondView extends SampleAppView {
     this._copyInfoButton = document.getElementById('copyInfo');
     this._hotkeyToggle = document.getElementById('hotkey-toggle');
     this._hotkeySecondScreen = document.getElementById('hotkey-second-screen');
+    this._owState = document.getElementById('ow-state');
+    this.loadedJSON = {};
 
     // Function to update all elements with translation
     const updateUILanguage = () => {
@@ -29,6 +32,7 @@ export class SecondView extends SampleAppView {
     // Initialize language on page load
     document.addEventListener('DOMContentLoaded', () => {
       updateUILanguage();
+      this.updateOWState();
     });
 
     // Listen for language changes from the Overwolf API
@@ -63,11 +67,77 @@ export class SecondView extends SampleAppView {
     // });
 
     if (parsed.is_teammate) {
-      this._logLine(this._teamList, parsed);
+      this._addRoster(this._teamList, parsed);
     }
     else{
-      this._logLine(this._enemyList, parsed);
+      this._addRoster(this._enemyList, parsed);
     }
+  }
+
+  updateOWState() {    
+    getGameState().then(state => {
+      if (state) {
+        function createCustomTooltip(content) {
+          const tooltip = document.createElement('div');
+          tooltip.classList.add('custom-tooltip');
+          tooltip.textContent = content;
+          document.body.appendChild(tooltip);
+          return tooltip;
+        }
+        
+        const stateIndicator = document.createElement('span');
+        stateIndicator.classList.add('state-indicator');
+        
+        let tooltipContent = '';
+        switch (state) {
+          case 1:
+            stateIndicator.style.backgroundColor = 'green';
+            tooltipContent = i18n.get('state_green');
+            break;
+          case 2:
+            stateIndicator.style.backgroundColor = 'yellow';
+            tooltipContent = i18n.get('state_yellow');
+            break;
+          case 3:
+            stateIndicator.style.backgroundColor = 'red';
+            tooltipContent = i18n.get('state_red');
+            break;
+          default:
+            stateIndicator.style.backgroundColor = 'gray';
+            tooltipContent = i18n.get('state_unknown');
+            break;
+        }
+        
+        stateIndicator.style.cssText += `
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          margin-left: 10px;
+        `;
+        
+        let tooltip;
+        this._owState.parentElement.addEventListener('mouseenter', (e) => {
+          tooltip = createCustomTooltip(tooltipContent);
+          tooltip.style.left = `${e.pageX + 10}px`;
+          tooltip.style.top = `${e.pageY + 10}px`;
+        });
+        this._owState.parentElement.addEventListener('mousemove', (e) => {
+          tooltip.style.left = `${e.pageX + 10}px`;
+          tooltip.style.top = `${e.pageY + 10}px`;
+        });
+        this._owState.parentElement.addEventListener('mouseleave', () => {
+          if (tooltip) tooltip.remove();
+        });
+        
+        this._owState.appendChild(stateIndicator);
+      } else {
+        this._owState.textContent = "Not available";
+      }
+    }).catch(error => {
+      console.error("Error getting game state:", error);
+      this._owState.textContent = "Error";
+    });
   }
 
   // Update toggle hotkey header
@@ -82,32 +152,7 @@ export class SecondView extends SampleAppView {
 
   // -- Private --
 
-  _copyEventsLog() {
-    this._copyLog(this._teamList);
-  }
-
-  _copyInfoLog() {
-    this._copyLog(this._enemyList);
-  }
-
-  // Copy text from log
-  _copyLog(log) {
-    // Get text from all span children
-    const nodes = log.childNodes;
-
-    let text = '';
-
-    for (let node of nodes) {
-      if (node.tagName === 'PRE') {
-        text += node.innerText + "\n";
-      }
-    }
-
-    overwolf.utils.placeOnClipboard(text);
-  }
-
-  // Add a line to a log
-  async _logLine(tbody, parsed) {
+  async _addRoster(tbody, parsed) {
     const roster_id = parsed.roster_id;
     const hero_role = parsed.hero_role;
     const hero_name = parsed.hero_name;
@@ -118,18 +163,17 @@ export class SecondView extends SampleAppView {
     }
     // 기존 파일 읽기
     let content = await readJSON();
-    let loadedJSON = {};
     
     // 기존 내용이 있으면 파싱
     if (content && content.trim() !== '') {
       try {
-        loadedJSON = JSON.parse(content);
+        this.loadedJSON = JSON.parse(content);
       } catch (err) {
         console.error('JSON 파싱 에러:', err);
-        loadedJSON = {};  // 파싱 실패 시 빈 객체 사용
+        this.loadedJSON = {};  // 파싱 실패 시 빈 객체 사용
       }
     }
-    const note = loadedJSON[battlenet_tag] || ''; // 메모 데이터 추가
+    const note = this.loadedJSON[battlenet_tag] || ''; // 메모 데이터 추가
     // console.log(`Adding ${player_name} (${battlenet_tag}) to ${roster_id} roster`);
   
     // 이미 존재하는 행(row) 찾기
@@ -172,7 +216,7 @@ export class SecondView extends SampleAppView {
     row.addEventListener('click', (e) => {
       // document.body.classList.add('dialog-open');
       
-      this._showInputDialog(parsed.battlenet_tag, noteCell, loadedJSON);
+      this._showInputDialog(parsed.battlenet_tag, noteCell);
     });
 
     row.addEventListener('remove', (e) => {
@@ -189,7 +233,7 @@ export class SecondView extends SampleAppView {
   }
   
   // 입력 다이얼로그 표시
-  _showInputDialog(battlenet_tag, noteCell, loadedJSON) {
+  _showInputDialog(battlenet_tag, noteCell) {
     document.body.classList.add('dialog-open');
 
     // 기존 입력창이 있다면 삭제
@@ -222,10 +266,10 @@ export class SecondView extends SampleAppView {
     const saveNote = async () => {
       try {
         // 배틀넷 태그를 키로 사용하여 데이터 병합
-        loadedJSON[battlenet_tag] = input.value;
+        this.loadedJSON[battlenet_tag] = input.value;
         
         // 병합된 데이터를 JSON 형태로 저장
-        const mergedJson = JSON.stringify(loadedJSON, null, 2);  // 들여쓰기 포함
+        const mergedJson = JSON.stringify(this.loadedJSON, null, 2);  // 들여쓰기 포함
         
         // 파일에 저장
         await writeJSON(mergedJson);

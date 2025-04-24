@@ -1,7 +1,11 @@
 export default {
     // Header
+    "status": "상태:",
     "show_hide_hotkey": "표시/숨기기 핫키:",
     "toggle_second_screen": "두 번째 화면 토글 핫키:",
+    "state_red": "게임 이벤트를 사용할 수 없습니다",
+    "state_yellow": "일부 게임 이벤트를 사용할 수 없습니다",
+    "state_green": "게임 이벤트를 사용할 수 있습니다",
     
     // Table headers
     "hero": "영웅",
