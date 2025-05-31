@@ -3,9 +3,8 @@ import { OWGames, OWGamesEvents, OWHotkeys } from "@overwolf/overwolf-api-ts";
 import { AppWindow } from "../AppWindow";
 import { kHotkeys, kWindowNames, kGamesFeatures } from "../consts";
 
-import { readJSON, writeJSON } from "../utils/file";
+import MemoManager from "../utils/memo";
 import i18n from "../utils/locale";
-import Tablesort from "tablesort";
 
 import WindowState = overwolf.windows.WindowStateEx;
 
@@ -20,7 +19,6 @@ class Second extends AppWindow {
 
   private _teamList: HTMLElement;
   private _enemyList: HTMLElement;
-
   private loadedJSON: { [key: string]: string } = {}; // 메모 데이터를 저장할 객체
 
   private constructor() {
@@ -57,6 +55,10 @@ class Second extends AppWindow {
     });
   }
 
+  async loadJSON() {
+    await MemoManager.loadJSON();
+  }
+
   public static instance() {
     if (!this._instance) {
       this._instance = new Second();
@@ -65,21 +67,10 @@ class Second extends AppWindow {
     return this._instance;
   }
 
-  private async loadJSON() {
-    // 기존 파일 읽기
-    let content = await readJSON();
-    // 기존 내용이 있으면 파싱
-    if (content && content.trim() !== "") {
-      try {
-        this.loadedJSON = JSON.parse(content);
-      } catch (err) {
-        console.error("JSON 파싱 에러:", err);
-        this.loadedJSON = {}; // 파싱 실패 시 빈 객체 사용
-      }
-    }
-  }
-
   private onInfoUpdates(info) {
+    if (!info || !info.roster) {
+      return;
+    }
     const roster = info.roster;
     // 모든 플레이어 정보 추출
     let players = Object.keys(roster)
@@ -169,6 +160,7 @@ class Second extends AppWindow {
       }
       console.log("Received match start event, clearing roster tables");
       // 테이블 초기화
+      // FIXME: 테이블 초기화가 roster 이벤트보다 먼저 발생
       this._teamList.innerHTML = "";
       this._enemyList.innerHTML = "";
 
@@ -270,19 +262,12 @@ class Second extends AppWindow {
         // 배틀넷 태그를 키로 사용하여 데이터 병합
         if (input.value.trim().length > 0) {
           this.loadedJSON[battlenet_tag] = input.value;
+          MemoManager.saveMemo(battlenet_tag, input.value); // 공백이 아니면 저장
           noteCell.parentElement.classList.add("has-note");
         } else {
-          delete this.loadedJSON[battlenet_tag]; // 공백이면 해당 항목 삭제
+          MemoManager.deleteMemo(battlenet_tag); // 공백이면 해당 항목 삭제
           noteCell.parentElement.classList.remove("has-note");
         }
-
-        // 병합된 데이터를 JSON 형태로 저장
-        const mergedJson = JSON.stringify(this.loadedJSON, null, 2); // 들여쓰기 포함
-
-        // 파일에 저장
-        await writeJSON(mergedJson);
-        console.log("저장 완료:", battlenet_tag);
-
         const span = document.createElement("span");
         span.textContent = input.value;
         noteCell.innerHTML = ""; // 기존 내용 제거

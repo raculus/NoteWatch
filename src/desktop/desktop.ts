@@ -1,14 +1,12 @@
 import { AppWindow } from "../AppWindow";
 import { kWindowNames } from "../consts";
 
-import { readJSON, writeJSON } from "../utils/file";
+import MemoManager from "../utils/memo";
 import i18n from "../utils/locale";
 // import showInputDialog from "../utils/dialog";
 
 class Desktop extends AppWindow {
   private static _instance: Desktop;
-
-  private loadedJSON: { [key: string]: string } = {}; // 메모 데이터를 저장할 객체
 
   private memoList: HTMLElement;
 
@@ -16,7 +14,8 @@ class Desktop extends AppWindow {
     super(kWindowNames.desktop);
 
     this.memoList = document.getElementById("memo-list");
-    this.loadJSON();
+
+    this.updateMemoList();
 
     // Function to update all elements with translation
     const updateUILanguage = () => {
@@ -50,8 +49,11 @@ class Desktop extends AppWindow {
     });
   }
 
-  updateMemoList() {
-    Object.entries(this.loadedJSON).forEach(([btag, memo]) => {
+  async updateMemoList() {
+    await MemoManager.loadJSON();
+
+    console.log("Updating memo list...");
+    Object.entries(MemoManager.getMemos()).forEach(([btag, memo]) => {
       const tr = document.createElement("tr");
       const btag_td = document.createElement("td");
       const btag_span = document.createElement("span");
@@ -60,7 +62,7 @@ class Desktop extends AppWindow {
       tr.appendChild(btag_td);
       const memo_td = document.createElement("td");
       const memo_span = document.createElement("span");
-      memo_span.textContent = memo;
+      memo_span.textContent = String(memo);
       memo_td.appendChild(memo_span);
       tr.appendChild(memo_td);
 
@@ -106,19 +108,11 @@ class Desktop extends AppWindow {
       try {
         // 배틀넷 태그를 키로 사용하여 데이터 병합
         if (input.value.trim().length > 0) {
-          this.loadedJSON[battlenet_tag] = input.value;
+          MemoManager.saveMemo(battlenet_tag, input.value); // 공백이 아니면 저장
         } else {
-          delete this.loadedJSON[battlenet_tag]; // 공백이면 해당 항목 삭제
+          MemoManager.deleteMemo(battlenet_tag); // 공백이면 해당 항목 삭제
           noteCell.parentElement.remove();
         }
-
-        // 병합된 데이터를 JSON 형태로 저장
-        const mergedJson = JSON.stringify(this.loadedJSON, null, 2); // 들여쓰기 포함
-
-        // 파일에 저장
-        await writeJSON(mergedJson);
-        console.log("저장 완료:", battlenet_tag);
-
         const span = document.createElement("span");
         span.textContent = input.value;
         noteCell.innerHTML = ""; // 기존 내용 제거
@@ -179,22 +173,6 @@ class Desktop extends AppWindow {
     // 입력창에 포커스
     input.focus();
   }
-
-  private async loadJSON() {
-    // 기존 파일 읽기
-    let content = await readJSON();
-    // 기존 내용이 있으면 파싱
-    if (content && content.trim() !== "") {
-      try {
-        this.loadedJSON = JSON.parse(content);
-        this.updateMemoList();
-      } catch (err) {
-        console.error("JSON 파싱 에러:", err);
-        this.loadedJSON = {}; // 파싱 실패 시 빈 객체 사용
-      }
-    }
-  }
-
   public static instance() {
     if (!this._instance) {
       this._instance = new Desktop();
