@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/general.css" />
+    <link rel="stylesheet" href="../../css/header.css" />
+    <link rel="stylesheet" href="../../css/ingame.css" />
+    <link rel="stylesheet" href="../../css/modal.css" />
+    <link rel="stylesheet" href="../../css/note.css" />
+    <title>NoteWatch</title>
+    <script src="vendor/ow-events-status-element.bundle.js"></script>
+  </head>
+  <body class="second">
+    <!-- -------------------------------- Header ------------------------------- -->
+    <header id="header" class="app-header">
+      <img src="../../icons/IconMouseOver.png" />
+      <h1>NoteWatch</h1>
+      <h1 class="hotkey-text">
+        <span data-i18n="status">Status:</span>
+        <ow-events-status-element gameid="10844" polling="600000">
+          <div slot="green">😎</div>
+          <div slot="yellow">⚠️</div>
+          <div slot="red">❌</div>
+        </ow-events-status-element>
+      </h1>
+      <h1 class="hotkey-text">
+        <span data-i18n="show_hide_hotkey">Show/Hide Hotkey:</span>
+        <kbd id="hotkey"></kbd>
+      </h1>
+      <div class="window-controls-group">
+        <button id="minimizeButton" class="window-control window-control-minimize" />
+        <button id="maximizeButton" class="window-control window-control-maximize" style="display: none" />
+        <button id="closeButton" class="window-control window-control-close" />
+      </div>
+    </header>
+
+    <!-- --------------------------------- Main -------------------------------- -->
+    <main>
+      <div id="logs">
+        <div id="events" class="logColumn">
+          <div id="teamList" class="dataText table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="hero">영웅</th>
+                  <th data-i18n="battletag">배틀태그</th>
+                  <th data-i18n="memo">메모</th>
+                </tr>
+              </thead>
+              <tbody id="teamTable" class="roster-table">
+                <tr class="roster-0"></tr>
+                <tr class="roster-1"></tr>
+                <tr class="roster-2"></tr>
+                <tr class="roster-3"></tr>
+                <tr class="roster-4"></tr>
+                <tr class="roster-5"></tr>
+                <tr class="roster-6"></tr>
+                <tr class="roster-7"></tr>
+                <tr class="roster-8"></tr>
+                <tr class="roster-9"></tr>
+                <tr class="roster-10"></tr>
+                <tr class="roster-11"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id="infoUpdates" class="logColumn">
+          <div id="enemyList" class="dataText table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="hero">영웅</th>
+                  <th data-i18n="battletag">배틀태그</th>
+                  <th data-i18n="memo">메모</th>
+                </tr>
+              </thead>
+              <tbody id="enemyTable" class="roster-table">
+                <tr class="roster-0"></tr>
+                <tr class="roster-1"></tr>
+                <tr class="roster-2"></tr>
+                <tr class="roster-3"></tr>
+                <tr class="roster-4"></tr>
+                <tr class="roster-5"></tr>
+                <tr class="roster-6"></tr>
+                <tr class="roster-7"></tr>
+                <tr class="roster-8"></tr>
+                <tr class="roster-9"></tr>
+                <tr class="roster-10"></tr>
+                <tr class="roster-11"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- <div id="owad" style="width: 400px; height: 600px; background: teal;">
+        <span style="display: flex; justify-content: center; align-items: center; height: 100%;">Ad</span>
+        <owadview />
+      </div> -->
+    </main>
+  </body>
+</html>

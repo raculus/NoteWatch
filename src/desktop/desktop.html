@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/general.css" />
+    <link rel="stylesheet" href="../../css/header.css" />
+    <link rel="stylesheet" href="../../css/modal.css" />
+    <link rel="stylesheet" href="../../css/note.css" />
+    <link rel="stylesheet" href="../../css/desktop.css" />
+    <title>NoteWatch</title>
+  </head>
+
+  <body class="desktop">
+    <!-- -------------------------------- Header ------------------------------- -->
+
+    <header id="header" class="app-header">
+      <img src="../../icons/IconMouseOver.png" />
+      <h1>NoteWatch</h1>
+      <div class="window-controls-group">
+        <button id="minimizeButton" class="window-control window-control-minimize" />
+        <button id="maximizeButton" class="window-control window-control-maximize" />
+        <button id="closeButton" class="window-control window-control-close" />
+      </div>
+    </header>
+
+    <!-- --------------------------------- Main -------------------------------- -->
+    <main>
+      <div class="search-bar-container">
+        <input
+          type="text"
+          id="searchBar"
+          class="search-bar"
+          placeholder="검색..."
+          aria-label="메모 검색"
+          data-i18n-placeholder="search"
+          data-i18n-aria-label="search-memo"
+        />
+      </div>
+      <div style="overflow-y: auto" class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="battletag">배틀태그</th>
+              <th data-i18n="memo">메모</th>
+            </tr>
+          </thead>
+          <tbody id="memo-list" class="roster-table"></tbody>
+        </table>
+      </div>
+    </main>
+    <script>
+      // 검색 기능
+      document.getElementById("searchBar").addEventListener("input", function () {
+        const filter = this.value.trim().toLowerCase();
+        const rows = document.querySelectorAll("#memo-list tr");
+        rows.forEach((row) => {
+          const battletag = row.querySelector("td:nth-child(1)")?.textContent?.toLowerCase() || "";
+          const memo = row.querySelector("td:nth-child(2)")?.textContent?.toLowerCase() || "";
+          if (battletag.includes(filter) || memo.includes(filter)) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
