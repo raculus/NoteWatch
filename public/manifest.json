@@ -2,7 +2,7 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-    "name": "NoteWatch TS",
+    "name": "NoteWatch",
     "author": "YeonStar",
     "version": "2.0.0",
     "minimum-overwolf-version": "0.170.0",
@@ -12,7 +12,14 @@
     "launcher_icon": "icons/desktop-icon.ico",
     "window_icon": "icons/IconMouseOver.png"
   },
-  "permissions": ["Extensions", "Profile", "Hotkeys", "GameInfo", "FileSystem", "DesktopStreaming"],
+  "permissions": [
+    "Extensions",
+    "Profile",
+    "Hotkeys",
+    "GameInfo",
+    "FileSystem",
+    "DesktopStreaming"
+  ],
   "data": {
     "start_window": "background",
     "hotkeys": {
@@ -94,14 +101,20 @@
     },
     "game_targeting": {
       "type": "dedicated",
-      "game_ids": [10844]
+      "game_ids": [
+        10844
+      ]
     },
-    "game_events": [10844],
+    "game_events": [
+      10844
+    ],
     "launch_events": [
       {
         "event": "GameLaunch",
         "event_data": {
-          "game_ids": [10844]
+          "game_ids": [
+            10844
+          ]
         },
         "start_minimized": true
       }

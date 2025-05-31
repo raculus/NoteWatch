@@ -54,8 +54,12 @@ class MemoManager {
     }
   }
 
-  static async loadJSON() {
+  static async loadJSON(isReload: boolean = false) {
     await this.init(); // 초기화 확인
+
+    if (!isReload && Object.keys(this.loadedJSON).length > 0) {
+      return; // 이미 로드된 경우
+    }
 
     if (this.isLogin) {
       // DB 노트 없으면
