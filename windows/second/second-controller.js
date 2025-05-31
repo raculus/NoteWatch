@@ -166,7 +166,6 @@ export class SecondController {
 
   // Logs info updates
   async _infoUpdateHandler(infoUpdate) {
-    console.log(infoUpdate);
     const roster = infoUpdate.info.roster;
 
     const extractedPlayers = Object.keys(roster)

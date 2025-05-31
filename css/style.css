@@ -9,6 +9,7 @@
   right: 0px;
 }
 
+
 /* Scrollbar styling */
 .table-container::-webkit-scrollbar {
   width: 12px; /* 스크롤바 너비 */
@@ -42,7 +43,12 @@
 }
 
 .has-note{
-    color: red;
+    color: red;    
+}
+
+.note-cell {
+  font-family: sans-serif;
+  font-size: 18px;
 }
 
 table {

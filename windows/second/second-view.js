@@ -188,6 +188,7 @@ export class SecondView extends SampleAppView {
     heroNameCell.classList.add('hero-image');
     const tagCell = document.createElement('td');
     const noteCell = document.createElement('td');
+    noteCell.classList.add('note-cell');
   
     const heroImage = document.createElement('img');
     heroImage.src = `../../img/heros/${hero_name}.png`;
@@ -214,15 +215,9 @@ export class SecondView extends SampleAppView {
     
     // 행 클릭 이벤트 추가
     row.addEventListener('click', (e) => {
-      // document.body.classList.add('dialog-open');
-      
       this._showInputDialog(parsed.battlenet_tag, noteCell);
     });
 
-    row.addEventListener('remove', (e) => {
-      // document.body.classList.remove('dialog-open');
-    });
-    
     // 이미 존재하는 행이 있으면 대체하고, 없으면 새로 추가
     if (existingRow) {
       // 기존 행을 새 행으로 대체
