@@ -22,4 +22,7 @@ export default {
   team: "Team",
   enemy: "Enemy",
   search: "Search",
+  enter_battletag_placeholder: "Enter battletag (e.g., Player#1234)",
+  enter_battletag_error: "Invalid battletag format. Correct format is Player#1234.",
+  add_memo: "Add Memo",
 };

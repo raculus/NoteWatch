@@ -58,6 +58,8 @@ table {
 td {
   text-overflow: ellipsis; /* 내용이 넘치면 ...으로 표시 */
   white-space: nowrap; /* 줄 바꿈 방지 */
+  overflow: hidden; /* 넘치는 내용 숨김 */
+  max-width: fit-content; /* 셀의 최대 너비를 내용에 맞춤 */
 }
 
 .roster-table > tr {

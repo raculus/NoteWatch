@@ -121,12 +121,12 @@ class MemoManager {
     await this.init(); // 초기화 확인
 
     if (value.trim().length < 1) {
-      await this.deleteMemo(key);
+      this.deleteMemo(key);
       return;
     } else if (this.isLogin) {
-      await this.saveMemoFromDB(key, value);
+      this.saveMemoFromDB(key, value);
     } else {
-      await this.saveMemoFromLocal(key, value);
+      this.saveMemoFromLocal(key, value);
     }
   }
 

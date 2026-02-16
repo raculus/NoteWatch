@@ -50,10 +50,18 @@ class Desktop extends AppWindow {
   }
 
   async updateMemoList() {
+    const addMemoButton = document.getElementById("add-memo-button");
+    addMemoButton.addEventListener("click", () => {
+      this._showInputDialog("", null);
+    });
     await MemoManager.loadJSON();
 
     console.log("Updating memo list...");
     Object.entries(MemoManager.getMemos()).forEach(([btag, memo]) => {
+      this.add_tr(btag, String(memo));
+    });
+  }
+  add_tr(btag: string, memo: string) {
       const tr = document.createElement("tr");
       const btag_td = document.createElement("td");
       const btag_span = document.createElement("span");
@@ -62,7 +70,7 @@ class Desktop extends AppWindow {
       tr.appendChild(btag_td);
       const memo_td = document.createElement("td");
       const memo_span = document.createElement("span");
-      memo_span.textContent = String(memo);
+      memo_span.textContent = memo;
       memo_td.appendChild(memo_span);
       tr.appendChild(memo_td);
 
@@ -72,9 +80,9 @@ class Desktop extends AppWindow {
       });
 
       this.memoList.appendChild(tr);
-    });
-  }
-  _showInputDialog(battlenet_tag, noteCell) {
+    }
+
+  _showInputDialog(battlenet_tag, memo_td: HTMLElement | null) {
     document.body.classList.add("dialog-open");
 
     // 기존 입력창이 있다면 삭제
@@ -96,29 +104,72 @@ class Desktop extends AppWindow {
 
     // 다이얼로그 제목
     const title = document.createElement("h3");
-    title.textContent = i18n.get("player_memo", { battletag: battlenet_tag });
+    title.id = "battletag-title";
 
+    if (!battlenet_tag || battlenet_tag.trim() === "") {
+      const inputBtag = document.createElement("input");
+      inputBtag.id = "battletag-input";
+      inputBtag.placeholder = i18n.get("enter_battletag_placeholder");
+      
+      // 배틀넷 태그 입력 필드에서도 Enter 키로 저장 가능하도록 설정
+      inputBtag.addEventListener("keydown", async (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          await saveNote();
+        } else if (e.key === "Escape") {
+          cancelDialog();
+        }
+      });
+      
+      title.appendChild(inputBtag);
+      
+      // 배틀넷 태그 입력 필드에 포커스
+      setTimeout(() => inputBtag.focus(), 0);
+    } else {
+      title.textContent = i18n.get("player_memo", { battletag: battlenet_tag });
+    }
     // 텍스트 입력창
     const input = document.createElement("textarea");
-    input.value = noteCell.textContent;
+    input.value = memo_td ? memo_td.textContent : "";
     input.placeholder = i18n.get("enter_memo_placeholder");
 
     // 저장 함수 정의
     const saveNote = async () => {
       try {
         // 배틀넷 태그를 키로 사용하여 데이터 병합
-        if (input.value.trim().length > 0) {
-          MemoManager.saveMemo(battlenet_tag, input.value); // 공백이 아니면 저장
+        const btagTitle = document.getElementById("battletag-title");
+        const btagInput = document.getElementById("battletag-input") as HTMLInputElement;
+        
+        // 새로운 메모 추가 시 input에서 값 가져오기, 기존 메모 수정 시 title에서 값 가져오기
+        if (btagInput) {
+          battlenet_tag = btagInput.value.trim();
         } else {
-          MemoManager.deleteMemo(battlenet_tag); // 공백이면 해당 항목 삭제
-          noteCell.parentElement.remove();
+          battlenet_tag = btagTitle.textContent.trim();
         }
-        const span = document.createElement("span");
-        span.textContent = input.value;
-        noteCell.innerHTML = ""; // 기존 내용 제거
-        noteCell.appendChild(span); // 메모 셀에 추가
+        
+        if (battlenet_tag.length < 1 || !battlenet_tag.includes("#")) {
+          alert(i18n.get("enter_battletag_error"));
+          return;
+        }
+        if (input.value.trim().length > 0) {
+          await MemoManager.saveMemo(battlenet_tag, input.value); // 공백이 아니면 저장
+          if (!memo_td) {
+            this.add_tr(battlenet_tag, input.value); // memo_td가 없으면 새로 추가
+          }
+        } else {
+          await MemoManager.deleteMemo(battlenet_tag); // 공백이면 해당 항목 삭제
+          memo_td.parentElement.remove();
+        }
+
+        if(memo_td){
+          const span = document.createElement("span");
+          span.textContent = input.value;
+          memo_td.innerHTML = ""; // 기존 내용 제거
+          memo_td.appendChild(span); // 메모 셀에 추가
+        }
 
         // 메모 데이터 저장 후 다이얼로그 닫기
+        document.body.classList.remove("dialog-open");
         dialogBackground.remove();
       } catch (error) {
         console.error("메모 저장 중 오류 발생:", error);
@@ -128,6 +179,7 @@ class Desktop extends AppWindow {
 
     // 취소 함수 정의
     const cancelDialog = () => {
+      document.body.classList.remove("dialog-open");
       dialogBackground.remove();
     };
 
@@ -147,11 +199,13 @@ class Desktop extends AppWindow {
 
     // 취소 버튼
     const cancelButton = document.createElement("button");
+    cancelButton.classList.add("cancel-button");
     cancelButton.textContent = i18n.get("cancel");
     cancelButton.addEventListener("click", cancelDialog);
 
     // 저장 버튼
     const saveButton = document.createElement("button");
+    saveButton.classList.add("save-button");
     saveButton.textContent = i18n.get("save");
     saveButton.addEventListener("click", saveNote);
 

@@ -22,4 +22,7 @@ export default {
   team: "아군",
   enemy: "적군",
   search: "검색",
+  enter_battletag_placeholder: "배틀태그를 입력하세요 (예: Player#1234)",
+  enter_battletag_error: "배틀태그 형식이 잘못되었습니다. 올바른 형식은 Player#1234입니다.",
+  add_memo: "메모 추가",
 };

@@ -4,7 +4,7 @@
   "meta": {
     "name": "NoteWatch",
     "author": "YeonStar",
-    "version": "2.0.0",
+    "version": "2.0.2",
     "minimum-overwolf-version": "0.170.0",
     "description": "Leave notes on users you meet in Overwatch matches! Record their play styles, attitudes, tactics, and more to help you make better decisions in your next game.",
     "icon": "icons/IconMouseOver.png",

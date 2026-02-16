@@ -60,21 +60,22 @@
     padding-bottom: 15px;
   }
   
-  .button-container button {
+  .button-container > button {
     padding: 6px 12px;
     border: 2px solid transparent;
     cursor: pointer;
     transition: transform 0.3s ease;
     position: relative;
+    border-radius: 4px;
   }
 
   /* Add pulsing border with pseudo-element */
-  .button-container button:hover {
+  .button-container > button button:hover {
     transform: scale(1.1);
     transition: transform 0.2s ease;
   }
   
-  .button-container button:hover::after {
+  .button-container > button:hover::after {
     content: '';
     position: absolute;
     top: -2px;
@@ -115,11 +116,11 @@
     }
   }
   
-  .button-container button:nth-child(1) {
+ .cancel-button {
     background-color: #f9f9f9;
     color: black;
   }
-  .button-container button:nth-child(2) {
+  .save-button {
     background-color: #eb6115;
     color: white;
   }
