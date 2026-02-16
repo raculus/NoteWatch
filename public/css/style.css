@@ -1,0 +1,197 @@
+@font-face {
+    font-family: 'koverwatch';
+    src: url('../fonts/koverwatch.ttf') format('truetype');
+}
+
+#owad {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
+
+/* Scrollbar styling */
+.table-container::-webkit-scrollbar {
+  width: 12px; /* 스크롤바 너비 */
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: transparent; /* 트랙 배경 (반투명 흰색) */
+  border-radius: 10px; /* 상하 라운드 처리 */
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.6); /* 스크롤바 색상 (반투명 흰색) */
+  border-radius: 10px; /* 상하 라운드 처리 */
+  border: 2px solid rgba(0, 0, 0, 0.1); /* 스크롤바 테두리 */
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 1.0); /* 호버 시 더 밝은 흰색 */
+}
+
+.table-container::-webkit-scrollbar-corner {
+  background: transparent; /* 스크롤바 코너 (투명) */
+}
+
+#teamList{
+    background-color: #00bfffd0;    
+}
+
+#enemyList{
+    background-color: #ef2f52d0;
+}
+
+.has-note{
+    color: red;    
+}
+
+.note-cell {
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+td {
+  text-overflow: ellipsis; /* 내용이 넘치면 ...으로 표시 */
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  overflow: hidden; /* 넘치는 내용 숨김 */
+  max-width: fit-content; /* 셀의 최대 너비를 내용에 맞춤 */
+}
+
+.roster-table > tr {
+  position: relative;
+  padding-bottom: 9px;
+  transition: transform 0.2s ease;
+  z-index: 1;
+}
+
+/* Remove the border from the direct hover and use a pseudo-element instead */
+.roster-table > tr:hover {
+  transform: scale(1.0421);
+  transition: transform 0.2s ease;
+  z-index: 1;
+}
+
+/* Add a pseudo-element for the blinking border */
+.roster-table > tr:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid #20f1f0;
+  pointer-events: none;
+  animation: blinkBorder 2s infinite;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Define the blinking animation */
+@keyframes blinkBorder {
+  0% {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-width: 3px;
+  }
+  50% {
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border-width: 1px;
+  }
+  100% {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-width: 3px;
+  }
+}
+
+.table-container {
+  overflow-y: auto;
+  max-height: 100vh; /* 테이블 컨테이너의 최대 높이 */
+  padding: 0; /* 패딩 제거 */
+  margin: 0; /* 마진 제거 */
+  box-sizing: border-box; /* 크기 계산에 테두리 포함 */
+}
+
+/* Adjust the table layout to remove spacing between cells */
+.roster-table {
+  border-collapse: collapse; /* This removes space between td elements */
+  border-spacing: 0; /* Additional property for older browsers */
+  width: 100%; /* Optional, ensures table takes full width */
+  overflow-y: auto;
+  max-height: 100vh;
+  box-sizing: border-box; /* 패딩과 테두리를 포함한 크기 계산 */
+}
+
+.roster-table > tr > td {
+  background: #2e3a55; /* 배경색 */
+  border-radius: 4px;
+  padding: 0; /* Remove default padding */
+  height: 55px;
+  vertical-align: middle; /* Vertical alignment */
+}
+
+/* For the hero image cell specifically */
+.roster-table > tr > td.hero-image {
+  width: 55px;
+  /* border-radius: 0; */
+  padding: 0; /* Remove any padding */
+  margin: 0; /* Remove any margin */
+}
+
+/* Add some padding only to text cells if needed */
+.roster-table > tr > td:not(.hero-image) {
+  padding-right: 10px;
+}
+
+.hero-image > img {
+  display: block;      /* inline 요소의 여백 제거 */
+  width: 100%;         /* td 가로를 가득 채움 */
+  height: 100%;        /* td 높이를 가득 채움 (필요시 조정) */
+  object-fit: cover;   /* 이미지 비율 유지하며 채움 */
+  vertical-align: bottom; /* Removes the small gap at the bottom of image */
+}
+
+.roster-table > tr > td > span{
+    padding-left: 19px;
+    padding-right: 19px;
+}
+
+.profile-name {
+flex-grow: 1;
+color: white;
+font-weight: bold;
+padding: 0 12px;
+}
+
+thead th{
+    text-align: left;
+    padding-right: 10px;
+    position: sticky;
+}
+
+.custom-tooltip {
+  position: absolute;
+  background-color: #333;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: opacity 0.1s ease-in-out;
+  opacity: 0.95;
+}

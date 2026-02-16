@@ -1,0 +1,128 @@
+{
+  "manifest_version": 1,
+  "type": "WebApp",
+  "meta": {
+    "name": "NoteWatch",
+    "author": "YeonStar",
+    "version": "2.0.2",
+    "minimum-overwolf-version": "0.170.0",
+    "description": "Leave notes on users you meet in Overwatch matches! Record their play styles, attitudes, tactics, and more to help you make better decisions in your next game.",
+    "icon": "icons/IconMouseOver.png",
+    "icon_gray": "icons/IconMouseNormal.png",
+    "launcher_icon": "icons/desktop-icon.ico",
+    "window_icon": "icons/IconMouseOver.png"
+  },
+  "permissions": [
+    "Extensions",
+    "Profile",
+    "Hotkeys",
+    "GameInfo",
+    "FileSystem",
+    "DesktopStreaming"
+  ],
+  "data": {
+    "start_window": "background",
+    "hotkeys": {
+      "sample_app_second_screen": {
+        "title": "Toggle Second Screen Window",
+        "action-type": "custom",
+        "default": "Ctrl+G"
+      }
+    },
+    "protocol_override_domains": {
+      "googlesyndication": "http"
+    },
+    "externally_connectable": {
+      "matches": [
+        "http://*.overwolf.com",
+        "https://*.overwolf.com",
+        "https://*.google-analytics.com",
+        "http://*.google-analytics.com",
+        "https://www.googleapis.com"
+      ]
+    },
+    "force_browser": "user",
+    "windows": {
+      "background": {
+        "file": "background.html",
+        "background_optimization": true,
+        "is_background_page": true
+      },
+      "desktop": {
+        "file": "desktop.html",
+        "desktop_only": true,
+        "native_window": true,
+        "resizable": true,
+        "transparent": true,
+        "override_on_update": true,
+        "size": {
+          "width": 1212,
+          "height": 699
+        },
+        "min_size": {
+          "width": 1212,
+          "height": 699
+        }
+      },
+      "second": {
+        "file": "second.html",
+        "desktop_only": true,
+        "native_window": true,
+        "resizable": true,
+        "transparent": false,
+        "override_on_update": true,
+        "keep_window_location": true,
+        "size": {
+          "width": 980,
+          "height": 495
+        },
+        "min_size": {
+          "width": 980,
+          "height": 495
+        }
+      },
+      "in_game": {
+        "file": "in_game.html",
+        "in_game_only": true,
+        "focus_game_takeover": "ReleaseOnHidden",
+        "focus_game_takeover_release_hotkey": "sample_app_ts_showhide",
+        "resizable": false,
+        "transparent": true,
+        "override_on_update": true,
+        "size": {
+          "width": 1212,
+          "height": 562
+        },
+        "min_size": {
+          "width": 1212,
+          "height": 600
+        }
+      }
+    },
+    "game_targeting": {
+      "type": "dedicated",
+      "game_ids": [
+        10844
+      ]
+    },
+    "game_events": [
+      10844
+    ],
+    "launch_events": [
+      {
+        "event": "GameLaunch",
+        "event_data": {
+          "game_ids": [
+            10844
+          ]
+        },
+        "start_minimized": true
+      }
+    ],
+    "developer": {
+      "enable_auto_refresh": true,
+      "reload_delay": 1000,
+      "filter": "*.*"
+    }
+  }
+}
